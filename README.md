@@ -44,21 +44,9 @@ Features live in `.devtool/features/` (configurable), with completed features in
 
 ## Install
 
-### Via skills.sh (recommended)
-
 ```bash
-npx skills add kanban-markdown
+npx skills add https://github.com/LachyFS/kanban-skill
 ```
-
-To install for a specific agent only:
-
-```bash
-npx skills add kanban-markdown -a claude-code
-```
-
-### Manual
-
-Download the `.skill` file from releases and install it in Claude Code, or clone this repo and point Claude at the directory.
 
 ## Structure
 
