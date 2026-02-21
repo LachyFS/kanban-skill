@@ -17,7 +17,7 @@ Each feature is a markdown file with YAML frontmatter. Files live in a features 
 | `modified` | `string` (quoted) | ISO 8601 timestamp | Last modification time |
 | `completedAt` | `string` (quoted) or `null` | `null` | Completion time (set when moved to done) |
 | `labels` | `array` | `[]` | List of label strings |
-| `order` | `int` (bare) | Count of features in column | Sort position within column (0-based) |
+| `order` | `string` (quoted) | Fractional index (e.g. `"a0"`) | Lexicographic sort position within column (fractional indexing) |
 
 ### Enum Values
 
@@ -66,7 +66,7 @@ created: "2026-02-20T10:00:00.000Z"
 modified: "2026-02-20T10:00:00.000Z"
 completedAt: null
 labels: []
-order: 0
+order: "a0"
 ---
 ```
 
@@ -74,9 +74,18 @@ Rules:
 - String values: always double-quoted (`"value"`)
 - Nullable strings: `null` (bare, no quotes) when unset, `"value"` when set
 - Labels: inline array syntax `["label1", "label2"]` or `[]` when empty
-- Order: bare integer, no quotes
+- Order: double-quoted string — fractional index for lexicographic sorting (e.g. `"a0"`, `"a1"`, `"a0V"`)
 - Field order must match the order above exactly
 - One blank line between closing `---` and content
+
+### Fractional Index Ordering
+
+The `order` field uses fractional indexing (via the `fractional-indexing` npm package). Keys are lexicographically sortable strings that allow insertion between any two items without reindexing other items.
+
+- First key in an empty column: `"a0"`
+- Appending after `"a0"`: `"a1"`, after `"a1"`: `"a2"`, etc.
+- Character sequence: `0-9`, `A-Z`, `a-z` (base-62, ASCII order)
+- The extension auto-migrates legacy bare integer orders to fractional indices on load
 
 ## File Storage
 
@@ -100,7 +109,7 @@ When a feature moves **from `done`** to another status:
 When moving within non-done columns:
 - File stays in same location
 - Update `status`, `modified`, and `order`
-- Reindex order of features in source and target columns
+- Only the moved feature's `order` is updated (fractional key between new neighbors); other features are not reindexed
 
 ## Content Format
 
