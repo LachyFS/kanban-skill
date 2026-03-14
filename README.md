@@ -1,6 +1,6 @@
 # kanban-markdown
 
-A Claude Code skill for managing kanban board features backed by markdown files with YAML frontmatter.
+An agent skill for managing kanban board features backed by markdown files with YAML frontmatter.
 
 Works with the [kanban-markdown](https://marketplace.visualstudio.com/items?itemName=your-publisher.kanban-markdown) VS Code extension — Claude can create, update, and move feature files that the extension renders as a kanban board.
 
